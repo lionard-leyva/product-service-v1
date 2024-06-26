@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/product?authSource=admin
+  liquibase:
+    enabled: true
+    change-log: classpath:/db.changelog/db.changelog-master.xml
+
+logging:
+  level:
+    org.springframework.boot: INFO
+    liquibase: DEBUG
+    org.springframework.data.mongodb: DEBUG

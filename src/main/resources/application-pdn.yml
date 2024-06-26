@@ -1,0 +1,24 @@
+spring:
+  jmx:
+    enabled: false
+  main:
+    lazy-initialization: true
+  datasource:
+    url: jdbc:sqlite:assessment.sqlite
+    username: admin
+    password: admin
+    driverClassName: org.sqlite.JDBC
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.SQLiteDialect
+  flyway:
+    enabled: true
+    user: admin
+    password: admin
+    schema: assessment
+    locations:
+      - classpath:db/prod/migration
+  spring:
+    sqlite:
+      console:
+        enabled: true
+        path: /h2-console
