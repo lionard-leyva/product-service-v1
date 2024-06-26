@@ -1,13 +1,16 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://root:root@localhost:27017/product?authSource=admin
-  liquibase:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/productdb
+    username: root
+    password: root
+
+  flyway:
     enabled: true
-    change-log: classpath:/db.changelog/db.changelog-master.xml
+    url: jdbc:postgresql://localhost:5432/productdb
+    user: root
+    password: root
+    locations: classpath:dev/migration
 
 logging:
   level:
-    org.springframework.boot: INFO
-    liquibase: DEBUG
-    org.springframework.data.mongodb: DEBUG
+    org.springframework.r2dbc.core: DEBUG

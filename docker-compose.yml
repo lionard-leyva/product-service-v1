@@ -1,15 +1,17 @@
 version: '3.8'
+
 services:
-  mongo:
-    image: mongo:4.4
-    container_name: mongo
-    ports:
-      - "27017:27017"
+  postgres:
+    image: postgres:latest
+    container_name: postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      POSTGRES_DB: productdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
     volumes:
-      - mongo-data:/data/db
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  mongo-data:
+  postgres-data:

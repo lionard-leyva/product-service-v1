@@ -3,11 +3,12 @@ package com.oneclick.productservice.domain;
 import java.math.BigDecimal;
 
 public record StandardProduct(
-        String id,
+        Long id,
         String name,
-        double price,
-        String category,
-        String description
+        String description,
+        Double price
+
+
 ) implements Product {
     @Override
     public String toString() {
@@ -15,14 +16,19 @@ public record StandardProduct(
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", category='" + category + '\'' +
+
                 ", description='" + description + '\'' +
                 '}';
     }
 
     @Override
+    public String type() {
+        return "Standard";
+    }
+
+    @Override
     public BigDecimal getPrice() {
-        return null;
+        return BigDecimal.valueOf(price);
     }
 }
 
