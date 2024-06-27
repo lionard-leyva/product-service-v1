@@ -1,7 +1,6 @@
 package com.oneclick.productservice.application.ports.in;
 
 import com.oneclick.productservice.domain.Product;
-import com.oneclick.productservice.domain.dto.ProductRequest;
 import reactor.core.publisher.Mono;
 
 public interface ProductService {
