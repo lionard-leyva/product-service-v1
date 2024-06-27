@@ -1,8 +1,6 @@
 package com.oneclick.productservice.application.ports.in;
 
-import com.oneclick.productservice.domain.Product;
-import com.oneclick.productservice.domain.ProductEntity;
-import com.oneclick.productservice.domain.ProductFactory;
+import com.oneclick.productservice.domain.*;
 import com.oneclick.productservice.infraestructure.persistence.ProductRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -18,8 +16,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<Product> createProduct(Product data) {
-        return repository.save(mapToEntity(data)).map(this::mapToDomain);
+    public Mono<Product> createProduct(Product product) {
+        return repository.save(mapToEntity(product)).map(this::mapToDomain);
     }
 
     @Override
@@ -28,11 +26,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<Product> updateProduct(String id, Product data) {
+    public Mono<Product> updateProduct(String id, Product product) {
         return repository.findById(id)
-                .map(product -> mapToEntity(data))
-                .flatMap(repository::save)
-                .map(this::mapToDomain);
+                .flatMap(existingProduct -> {
+                    Product updatedProduct = createUpdatedProduct(product, existingProduct.getId());
+                    return repository.save(mapToEntity(updatedProduct))
+                            .map(this::mapToDomain);
+                });
+    }
+
+    private Product createUpdatedProduct(Product product, Long existingId) {
+        return switch (product) {
+            case BasicProduct basicProduct ->
+                    new BasicProduct(existingId, basicProduct.name(), basicProduct.description(), basicProduct.price());
+            case StandardProduct standardProduct ->
+                    new StandardProduct(existingId, standardProduct.name(), standardProduct.description(), standardProduct.price());
+            case DefaultProduct defaultProduct ->
+                    new DefaultProduct(existingId, defaultProduct.name(), defaultProduct.description(), defaultProduct.price());
+
+        };
     }
 
     @Override
