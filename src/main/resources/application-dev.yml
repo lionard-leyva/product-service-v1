@@ -1,13 +1,16 @@
 spring:
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/productdb
-    username: root
+    username: postgres
     password: password
   flyway:
     url: jdbc:postgresql://localhost:5432/productdb
-    user: root
+    user: postgres
     password: password
-
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
 
 logging:
   level:

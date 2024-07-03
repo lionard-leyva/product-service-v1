@@ -1,9 +1,7 @@
 version: '3.8'
-
 services:
   postgres:
-    image: postgres:latest
-    container_name: postgres
+    image: postgres:16.3-alpine
     environment:
       POSTGRES_DB: productdb
       POSTGRES_USER: postgres
@@ -11,7 +9,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-
+      - postgres_data:/var/lib/postgresql/data
+  flyway:
+    enabled: true
+    user: postgres
+    password: postgres
+    schema: productdb
+    locations:
+      - classpath:db/dev/migration
 volumes:
-  postgres-data:
+  postgres_data:
