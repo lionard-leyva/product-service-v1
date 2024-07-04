@@ -4,9 +4,13 @@ spring:
     username: postgres
     password: password
   flyway:
+    enabled: true
     url: jdbc:postgresql://localhost:5432/productdb
     user: postgres
     password: password
+    schemas: productdb
+    locations:
+      - classpath:db/dev/migration
   data:
     r2dbc:
       repositories:
