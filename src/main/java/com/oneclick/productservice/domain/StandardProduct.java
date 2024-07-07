@@ -8,18 +8,7 @@ public record StandardProduct(
         String description,
         Double price
 
-
 ) implements Product {
-    @Override
-    public String toString() {
-        return "StandardProduct{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-
-                ", description='" + description + '\'' +
-                '}';
-    }
 
     @Override
     public String type() {
@@ -31,4 +20,3 @@ public record StandardProduct(
         return BigDecimal.valueOf(price);
     }
 }
-

@@ -7,23 +7,13 @@ public record DefaultProduct(
         String name,
         String description,
         Double price
+) implements Product {
 
-
-)
-        implements Product {
-    @Override
-    public String toString() {
-        return "DefaultProduct{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-
-                '}';
-    }
     @Override
     public String type() {
         return "Default";
     }
+
     @Override
     public BigDecimal getPrice() {
         return BigDecimal.valueOf(price);

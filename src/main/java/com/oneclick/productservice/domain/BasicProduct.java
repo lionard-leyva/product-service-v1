@@ -7,21 +7,7 @@ public record BasicProduct(
         String name,
         String description,
         Double price
-
-)
-
-        implements Product {
-    @Override
-    public String toString() {
-
-        return "BasicProduct{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-
-                ", description='" + description + '\'' +
-                '}';
-    }
+) implements Product {
 
     @Override
     public String type() {
