@@ -1,6 +1,7 @@
 package com.oneclick.productservice.application.ports.in;
 
 import com.oneclick.productservice.domain.Product;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ProductService {
@@ -11,4 +12,6 @@ public interface ProductService {
     Mono<Product> updateProduct(String id, Product productRequest);
 
     Mono<Void> deleteProduct(String id);
+
+    Flux<Product> getAllProduct();
 }

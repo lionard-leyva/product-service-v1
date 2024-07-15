@@ -5,6 +5,7 @@ import com.oneclick.productservice.domain.ProductEntity;
 import com.oneclick.productservice.domain.factory.ProductFactoryProvider;
 import com.oneclick.productservice.infraestructure.persistence.ProductRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
@@ -20,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> createProduct(Product product) {
-        return repository.save(mapProductToProductEntity(product)).map(this::mapToDomain);
+        return repository.save(mapToEntity(product)).map(this::mapToDomain);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
         return repository.findById(id)
                 .flatMap(existingProduct -> {
                     Product updatedProduct = createUpdatedProduct(product, existingProduct.getId());
-                    return repository.save(mapProductToProductEntity(updatedProduct))
+                    return repository.save(mapToEntity(updatedProduct))
                             .map(this::mapToDomain);
                 });
     }
@@ -48,17 +49,16 @@ public class ProductServiceImpl implements ProductService {
         return repository.deleteById(id);
     }
 
+    @Override
+    public Flux<Product> getAllProduct() {
+        return null;
+    }
+
     public Product mapToDomain(ProductEntity entity) {
-        var factory = ProductFactoryProvider.getFactory(productEntityToProduct(entity));
-        return factory.create(entity.getId(), entity.getName(), entity.getDescription(), entity.getPrice());
+        return null;
     }
 
-    private Product productEntityToProduct(ProductEntity entity) {
-        var factory = ProductFactoryProvider.getFactory(entity.getType());
-        return factory.create(entity.getId(), entity.getName(), entity.getDescription(), entity.getPrice());
-    }
-
-    private ProductEntity mapProductToProductEntity(Product product) {
+    private ProductEntity mapToEntity(Product product) {
         return productToEntityConverter.apply(product);
     }
 

@@ -13,7 +13,16 @@ public class ProductEntity {
     private Double price;
     private String type;
 
-    // Getters and setters
+    public ProductEntity() {
+    }
+
+    public ProductEntity(Long id, String name, String description, Double price, String type) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.type = type;
+    }
 
     public Long getId() {
         return id;

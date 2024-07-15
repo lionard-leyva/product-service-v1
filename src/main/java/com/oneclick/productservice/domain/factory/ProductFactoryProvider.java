@@ -16,13 +16,4 @@ public class ProductFactoryProvider {
             case DefaultProduct defaultProduct -> new DefaultProductFactory();
         };
     }
-
-    public static ProductFactory getFactory(String type) {
-        return switch (type) {
-            case "BasicProduct" -> new BasicProductFactory();
-            case "StandardProduct" -> new StandardProductFactory();
-            case "DefaultProduct" -> new DefaultProductFactory();
-            default -> throw new IllegalArgumentException("Invalid product type");
-        };
-    }
 }
