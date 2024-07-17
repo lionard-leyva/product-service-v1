@@ -1,15 +1,17 @@
 package com.oneclick.productservice.dto;
 
+import java.math.BigDecimal;
+
 public class ProductRequest {
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private String type;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(String name, String description, double price, String type) {
+    public ProductRequest(String name, String description, BigDecimal price, String type) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -32,11 +34,11 @@ public class ProductRequest {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

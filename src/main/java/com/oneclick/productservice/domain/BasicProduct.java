@@ -6,7 +6,7 @@ public record BasicProduct(
         Long id,
         String name,
         String description,
-        Double price
+        BigDecimal price
 ) implements Product {
 
     @Override
@@ -16,6 +16,6 @@ public record BasicProduct(
 
     @Override
     public BigDecimal getPrice() {
-        return null;
+        return price;
     }
 }

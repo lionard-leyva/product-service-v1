@@ -9,7 +9,7 @@ public sealed interface Product permits BasicProduct, DefaultProduct, StandardPr
 
     String description();
 
-    Double price();
+    BigDecimal price();
 
     String type();
 

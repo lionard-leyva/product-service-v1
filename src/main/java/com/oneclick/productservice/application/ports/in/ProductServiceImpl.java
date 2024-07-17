@@ -21,7 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> createProduct(Product product) {
-        return repository.save(mapToEntity(product)).map(this::mapToDomain);
+        //TODO: Implement this method
+        return null;
     }
 
     @Override
@@ -31,12 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> updateProduct(String id, Product product) {
-        return repository.findById(id)
-                .flatMap(existingProduct -> {
-                    Product updatedProduct = createUpdatedProduct(product, existingProduct.getId());
-                    return repository.save(mapToEntity(updatedProduct))
-                            .map(this::mapToDomain);
-                });
+        //TODO: Implement this method
+//        return repository.findById(id)
+//                .flatMap(existingProduct -> {
+//                    Product updatedProduct = createUpdatedProduct(product, existingProduct.getId());
+//                    return repository.save(mapToEntity(updatedProduct))
+//                            .map(this::mapToDomain);
+//                });
+        return null;
     }
 
     private Product createUpdatedProduct(Product product, Long existingId) {
@@ -44,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
         return factory.create(existingId, product.name(), product.description(), product.price());
     }
 
-    @Override
+
     public Mono<Void> deleteProduct(String id) {
         return repository.deleteById(id);
     }
@@ -58,17 +61,17 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
-    private ProductEntity mapToEntity(Product product) {
-        return productToEntityConverter.apply(product);
-    }
+//    private ProductEntity mapToEntity(Product product) {
+//        return productToEntityConverter.apply(product);
+//    }
 
-    private final Function<Product, ProductEntity> productToEntityConverter = product -> {
-        ProductEntity entity = new ProductEntity();
-        entity.setId(product.id());
-        entity.setName(product.name());
-        entity.setDescription(product.description());
-        entity.setPrice(product.price());
-        entity.setType(product.type());
-        return entity;
-    };
+//    private final Function<Product, ProductEntity> productToEntityConverter = product -> {
+//        ProductEntity entity = new ProductEntity();
+//        entity.setId(product.id());
+//        entity.setName(product.name());
+//        entity.setDescription(product.description());
+//        entity.setPrice(product.price());
+//        entity.setType(product.type());
+//        return entity;
+//    };
 }
