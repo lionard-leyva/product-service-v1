@@ -12,11 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+class ProductServiceTest {
 
     @InjectMocks
     public ProductServiceImpl productService;
@@ -29,10 +31,18 @@ public class ProductServiceTest {
 
     @Test
     void createProduct_shouldReturnCreatedProduct() {
-      //Arrange
+        //Arrange
         ProductRequest productRequest = new ProductRequest("Test Product", "Test Description", BigDecimal.TEN, "BASIC");
         ProductEntity productEntity = new ProductEntity(1L, "Test Product", "Test Description", BigDecimal.TEN, "BASIC");
         ProductEntity savedProductEntity = new ProductEntity(1L, "Test Product", "Test Description", BigDecimal.TEN, "BASIC");
         Product createdProduct = new BasicProduct(1L, "Test Product", "Test Description", BigDecimal.TEN);
+
+        //Act
+        Mono<Product> result = productService.createProduct(productRequest);
+
+        //Assert
+        StepVerifier.create(result)
+                .expectNext(createdProduct)
+                .verifyComplete();
     }
 }
