@@ -21,7 +21,6 @@ public class ProductServiceImpl implements ProductService {
         this.factoryRegistry = factoryRegistry;
     }
 
-
     @Override
     public Mono<Product> createProduct(ProductRequest productRequest) {
 //        return Mono.just(productRequest)

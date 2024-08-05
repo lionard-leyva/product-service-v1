@@ -14,27 +14,27 @@ class ProductMapperTest {
     @Test
     void mapToDomain_withBasicProduct_shouldReturnBasicProduct() {
         ProductEntity productEntity = new ProductEntity(1L, "Basic Product", "Description", BigDecimal.valueOf(10.00), "BASIC");
-        Product result = productMapper.mapToDomain(productEntity);
+        Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(BasicProduct.class, result);
     }
 
     @Test
     void mapToDomain_withDefaultProduct_shouldReturnDefaultProduct() {
         ProductEntity productEntity = new ProductEntity(1L, "Default Product", "Description", BigDecimal.valueOf(10.00), "DEFAULT");
-        Product result = productMapper.mapToDomain(productEntity);
+        Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(DefaultProduct.class, result);
     }
 
     @Test
     void mapToDomain_withStandardProduct_shouldReturnDefaultProduct() {
         ProductEntity productEntity = new ProductEntity(1L, "Standard Product", "Description", BigDecimal.valueOf(10.00), "STANDARD");
-        Product result = productMapper.mapToDomain(productEntity);
+        Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(StandardProduct.class, result);
     }
 
     @Test
     void mapToDomain_withUnknownProduct_shouldReturnDefaultProduct() {
         ProductEntity productEntity = new ProductEntity(1L, "Unknown Product", "Description", BigDecimal.valueOf(10.00), "UNKNOWN");
-       assertThrows(IllegalArgumentException.class, () -> productMapper.mapToDomain(productEntity));
+        assertThrows(IllegalArgumentException.class, () -> productMapper.productEntityToProduct(productEntity));
     }
 }

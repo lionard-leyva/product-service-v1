@@ -4,7 +4,7 @@ import com.oneclick.productservice.domain.*;
 
 public class ProductMapper {
 
-    public Product mapToDomain(ProductEntity productEntity) {
+    public Product productEntityToProduct (ProductEntity productEntity) {
         return switch (productEntity) {
             case ProductEntity(var id, var name, var description, var price, String type)
                     when type.equalsIgnoreCase("Basic") -> new BasicProduct(id, name, description, price);
