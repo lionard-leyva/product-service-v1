@@ -1,9 +1,6 @@
 package com.oneclick.productservice.testbuilders;
 
-import com.oneclick.productservice.domain.BasicProduct;
-import com.oneclick.productservice.domain.DefaultProduct;
-import com.oneclick.productservice.domain.Product;
-import com.oneclick.productservice.domain.StandardProduct;
+import com.oneclick.productservice.domain.*;
 import com.oneclick.productservice.dto.ProductRequest;
 
 import java.math.BigDecimal;
@@ -33,6 +30,31 @@ public class ProductTestBuilder {
     public static ProductRequest defaultProductRequest() {
         return new ProductRequest("Default Test Product", "Default Description", BigDecimal.valueOf(15), "DEFAULT");
     }
+
+    public static ProductEntity basicProductEntity() {
+        return new ProductEntity(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN, "BASIC");
+    }
+
+    public static ProductEntity standardProductEntity() {
+        return new ProductEntity(1L, "Standard Test Product", "Basic Description", BigDecimal.TEN, "STANDARD");
+    }
+
+    public static ProductEntity defaultProductEntity() {
+        return new ProductEntity(1L, "Default Test Product", "Default Description", BigDecimal.TEN, "DEFAULT");
+    }
+
+    public static ProductEntity savedBasicProductEntity() {
+        return new ProductEntity(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN, "BASIC");
+    }
+
+    public static ProductEntity savedStandardProductEntity() {
+        return new ProductEntity(1L, "Standard Test Product", "Basic Description", BigDecimal.TEN, "STANDARD");
+    }
+
+    public static ProductEntity savedDefaultProductEntity() {
+        return new ProductEntity(1L, "Default Test Product", "Basic Description", BigDecimal.TEN, "DEFAULT");
+    }
+
 
     public static class CustomProductBuilder {
         private Long id;
