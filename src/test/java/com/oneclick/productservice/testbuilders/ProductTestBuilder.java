@@ -1,19 +1,83 @@
 package com.oneclick.productservice.testbuilders;
 
+import com.oneclick.productservice.domain.BasicProduct;
+import com.oneclick.productservice.domain.DefaultProduct;
+import com.oneclick.productservice.domain.Product;
+import com.oneclick.productservice.domain.StandardProduct;
+import com.oneclick.productservice.dto.ProductRequest;
+
+import java.math.BigDecimal;
+
 public class ProductTestBuilder {
 
-    @Builder
-    public static Product product(Integer id, String name, String description, BigDecimal price, String type) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName(name);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setType(type);
-        return product;
+    public static BasicProduct basicProduct() {
+        return new BasicProduct(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN);
     }
 
-    public static ProductBuilder productBuilder() {
-        return new ProductBuilder();
+    public static StandardProduct standardProduct() {
+        return new StandardProduct(2L, "Standard Test Product", "Standard Description", BigDecimal.valueOf(20));
+    }
+
+    public static DefaultProduct defaultProduct() {
+        return new DefaultProduct(3L, "Default Test Product", "Default Description", BigDecimal.valueOf(15));
+    }
+
+    public static ProductRequest basicProductRequest() {
+        return new ProductRequest("Basic Test Product", "Basic Description", BigDecimal.TEN, "BASIC");
+    }
+
+    public static ProductRequest standardProductRequest() {
+        return new ProductRequest("Standard Test Product", "Standard Description", BigDecimal.valueOf(20), "STANDARD");
+    }
+
+    public static ProductRequest defaultProductRequest() {
+        return new ProductRequest("Default Test Product", "Default Description", BigDecimal.valueOf(15), "DEFAULT");
+    }
+
+    public static class CustomProductBuilder {
+        private Long id;
+        private String name;
+        private String description;
+        private BigDecimal price;
+        private String type;
+
+        public CustomProductBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public CustomProductBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CustomProductBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public CustomProductBuilder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public CustomProductBuilder type(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Product build() {
+            return switch (type.toUpperCase()) {
+                case "BASIC" -> new BasicProduct(id, name, description, price);
+                case "STANDARD" -> new StandardProduct(id, name, description, price);
+                case "DEFAULT" -> new DefaultProduct(id, name, description, price);
+                default -> throw new IllegalArgumentException("Unknown product type");
+            };
+        }
+
+        public static CustomProductBuilder customProduct() {
+            return new CustomProductBuilder();
+        }
+
     }
 }

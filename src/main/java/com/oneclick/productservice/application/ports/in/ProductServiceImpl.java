@@ -3,42 +3,52 @@ package com.oneclick.productservice.application.ports.in;
 import com.oneclick.productservice.domain.Product;
 import com.oneclick.productservice.domain.ProductEntity;
 import com.oneclick.productservice.domain.factory.ProductFactoryRegistry;
+import com.oneclick.productservice.dto.ProductMapper;
 import com.oneclick.productservice.dto.ProductRequest;
 import com.oneclick.productservice.infraestructure.persistence.ProductRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ProductServiceImpl implements ProductService {
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
     private final ProductFactoryRegistry factoryRegistry;
+    private final ProductMapper productMapper;
+
 
     public ProductServiceImpl(ProductRepository productRepository,
-                              ProductFactoryRegistry factoryRegistry) {
+                              ProductFactoryRegistry factoryRegistry,
+                              ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.factoryRegistry = factoryRegistry;
+        this.productMapper = productMapper;
     }
 
     @Override
     public Mono<Product> createProduct(ProductRequest productRequest) {
-//        return Mono.just(productRequest)
-//                .map(this::createProductFromRequest)
-//                .flatMap(productRepository::save)
-//                .map(this::mapToDomain);
-        return null;
+        return Mono.just(productRequest)
+                .map(productMapper::productRequestToEntity)
+                .flatMap(productRepository::save)
+                .map(productMapper::productEntityToProduct)
+                .doOnNext(savedProduct -> log.info("Product created: {}", savedProduct.id()));
     }
 
-    private Product createProductFromRequest(ProductRequest request) {
-        return switch (request) {
-            case ProductRequest(var name, var description, var price, var type)
-                    when factoryRegistry.getFactory(type) != null ->
-                    factoryRegistry.getFactory(type).create(null, name, description, price);
-            case ProductRequest(_, _, _, var type) ->
-                    throw new IllegalArgumentException("Unknown product type: " + type);
-        };
-    }
+
+//    private Product createProductFromRequest(ProductRequest request) {
+//        return switch (request) {
+//            case ProductRequest(var name, var description, var price, var type)
+//                    when factoryRegistry.getFactory(type) != null ->
+//                    factoryRegistry.getFactory(type).create(null, name, description, price);
+//            case ProductRequest(_, _, _, var type) ->
+//                    throw new IllegalArgumentException("Unknown product type: " + type);
+//        };
+//    }
 
     @Override
     public Mono<Product> getProduct(String id) {
