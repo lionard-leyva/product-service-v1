@@ -6,12 +6,11 @@ import com.oneclick.productservice.domain.factory.ProductFactoryRegistry;
 import com.oneclick.productservice.dto.ProductMapper;
 import com.oneclick.productservice.dto.ProductRequest;
 import com.oneclick.productservice.infraestructure.persistence.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class ProductServiceImpl implements ProductService {
