@@ -1,7 +1,10 @@
 package com.oneclick.productservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import java.math.BigDecimal;
 
+@JsonTypeName("STANDARD")
 public record StandardProduct(
         Long id,
         String name,

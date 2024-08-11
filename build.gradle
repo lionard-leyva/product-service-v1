@@ -28,6 +28,7 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
 }
 
 
