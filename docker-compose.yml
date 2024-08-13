@@ -5,13 +5,22 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5433"
     environment:
       POSTGRES_DB: productdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
       - postgres-data:/var/lib/postgresql/data
-
+  product-service:
+    build: .
+    container_name: product-service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    command: ["java","-Dspring.profiles.active=test","-jar","app/app.jar"]
+    ports:
+        - "8080:8080"
 volumes:
   postgres-data:

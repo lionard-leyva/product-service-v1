@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5433/productdb
+    username: postgres
+    password: password
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5433/productdb
+    user: postgres
+    password: password
+    schemas: public
+    locations:
+      - classpath:db/migration
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG

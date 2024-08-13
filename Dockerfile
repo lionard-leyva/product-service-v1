@@ -1,5 +1,5 @@
 # Usa una imagen base oficial de OpenJDK
-FROM openjdk:21-slim
+FROM openjdk:22-ea-1-jdk-slim
 
 # Crea un directorio para la aplicación
 WORKDIR /app
