@@ -1,15 +1,25 @@
-# Usa una imagen base oficial de OpenJDK
-FROM openjdk:22-ea-1-jdk-slim
+# Etapa de construcción
+FROM gradle:9.
 
-# Crea un directorio para la aplicación
 WORKDIR /app
 
-# Copia el archivo JAR construido en el contenedor. Asegúrate de que solo hay un archivo JAR en build/libs/
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+# Copia los archivos necesarios
+COPY build.gradle settings.gradle ./
+COPY src ./src
+
+# Ejecuta la compilación de Gradle
+RUN gradle build --no-daemon
+
+# Etapa final
+FROM openjdk:22-slim
+
+WORKDIR /app
+
+# Copia el archivo JAR generado en la etapa anterior
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 # Expone el puerto que usa Spring Boot
 EXPOSE 8080
 
 # Ejecuta la aplicación
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
