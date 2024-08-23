@@ -1,16 +1,15 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/productdb
-    username: postgres
-    password: password
+    url: r2dbc:postgresql://postgres:5432/productdb
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   flyway:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/productdb
-    user: postgres
-    password: password
+    url: ${SPRING_FLYWAY_URL}
+    user: ${SPRING_FLYWAY_USER}
+    password: ${SPRING_FLYWAY_PASSWORD}
     schemas: productdb
-    locations:
-      - classpath:db/dev/migration
+    locations: classpath:db/dev/migration
   data:
     r2dbc:
       repositories:
@@ -19,3 +18,4 @@ spring:
 logging:
   level:
     org.springframework.r2dbc.core: DEBUG
+    org.flywaydb: DEBUG

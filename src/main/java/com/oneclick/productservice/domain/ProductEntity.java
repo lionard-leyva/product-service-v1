@@ -5,6 +5,6 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
-@Table("product")
+@Table("productdb.product")
 public record ProductEntity(@Id Long id, String name, String description, BigDecimal price, String type) {
 }

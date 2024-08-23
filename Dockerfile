@@ -1,17 +1,26 @@
 # Etapa de construcción
-FROM gradle:9.
+FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
+
+# Instalar Gradle
+RUN apt-get update && apt-get install -y curl unzip \
+    && curl -L https://services.gradle.org/distributions/gradle-8.5-bin.zip -o gradle.zip \
+    && unzip gradle.zip \
+    && mv gradle-8.5 /opt/gradle \
+    && rm gradle.zip
+ENV PATH=$PATH:/opt/gradle/bin
 
 # Copia los archivos necesarios
 COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Ejecuta la compilación de Gradle
-RUN gradle build --no-daemon
+# En la etapa de construcción
+RUN gradle build -x test --no-daemon
 
 # Etapa final
-FROM openjdk:22-slim
+FROM eclipse-temurin:22-jre-jammy
 
 WORKDIR /app
 

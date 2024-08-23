@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS productdb;
 drop table if exists "product";
 
 -- V100__create_product.sql
