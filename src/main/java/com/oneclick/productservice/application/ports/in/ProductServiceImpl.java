@@ -38,6 +38,13 @@ public class ProductServiceImpl implements ProductService {
                 .doOnNext(savedProduct -> log.info("Product created: {}", savedProduct.id()));
     }
 
+    @Override
+    public Mono<Product> getProduct(Long id) {
+        return productRepository.findById(id)
+                .map(this::mapToDomain)
+                .doOnNext(product -> log.info("Product found: {}", product.id()));
+    }
+
 
 //    private Product createProductFromRequest(ProductRequest request) {
 //        return switch (request) {
@@ -49,13 +56,10 @@ public class ProductServiceImpl implements ProductService {
 //        };
 //    }
 
-    @Override
-    public Mono<Product> getProduct(String id) {
-        return productRepository.findById(id).map(this::mapToDomain);
-    }
+
 
     @Override
-    public Mono<Product> updateProduct(String id, Product product) {
+    public Mono<Product> updateProduct(Long id, ProductRequest product) {
         //TODO: Implement this method
 //        return repository.findById(id)
 //                .flatMap(existingProduct -> {
@@ -66,15 +70,15 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    @Override
+    public Mono<Void> deleteProduct(Long id) {
+        return null;
+    }
+
     private Product createUpdatedProduct(Product product, Long existingId) {
 //        var factory = ProductFactoryRegistry.getFactory(product);
 //        return factory.create(existingId, product.name(), product.description(), product.price());
         return null;
-    }
-
-
-    public Mono<Void> deleteProduct(String id) {
-        return productRepository.deleteById(id);
     }
 
     @Override

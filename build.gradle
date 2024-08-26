@@ -8,8 +8,8 @@ group = 'com.oneclick'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_22
+	targetCompatibility = JavaVersion.VERSION_22
 }
 
 repositories {
@@ -33,4 +33,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += "--enable-preview"
+}
+tasks.withType(Test).configureEach {
+	jvmArgs += "--enable-preview"
 }

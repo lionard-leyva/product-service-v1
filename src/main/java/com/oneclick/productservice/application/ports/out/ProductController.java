@@ -5,10 +5,7 @@ import com.oneclick.productservice.domain.Product;
 import com.oneclick.productservice.dto.ProductRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -27,6 +24,13 @@ public class ProductController {
                 .map(product -> ResponseEntity.status(HttpStatus.CREATED)
                         .body(product));
     }
+
+    @GetMapping("/{id}")
+    public Mono<ResponseEntity<Product>> getProduct(@PathVariable String id) {
+        return productService.getProduct(Long.valueOf(id))
+                .map(ResponseEntity::ok);
+    }
+
 
 //    @PutMapping("/{id}")
 //    public Mono<ResponseEntity<Product>> updateProduct(@PathVariable String id,

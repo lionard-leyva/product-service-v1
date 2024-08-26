@@ -18,6 +18,7 @@ public class ProductMapper {
             default -> throw new IllegalArgumentException("Unexpected value: " + productEntity);
         };
     }
+
     public ProductEntity productRequestToEntity(ProductRequest request) {
         return new ProductEntity(
                 null,

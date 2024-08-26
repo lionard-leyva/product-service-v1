@@ -3,13 +3,15 @@ FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
 
-# Instalar Gradle
+
+# Instalar Gradle 8.10
 RUN apt-get update && apt-get install -y curl unzip \
-    && curl -L https://services.gradle.org/distributions/gradle-8.5-bin.zip -o gradle.zip \
+    && curl -L https://services.gradle.org/distributions/gradle-8.10-bin.zip -o gradle.zip \
     && unzip gradle.zip \
-    && mv gradle-8.5 /opt/gradle \
+    && mv gradle-8.10 /opt/gradle \
     && rm gradle.zip
 ENV PATH=$PATH:/opt/gradle/bin
+
 
 # Copia los archivos necesarios
 COPY build.gradle settings.gradle ./
