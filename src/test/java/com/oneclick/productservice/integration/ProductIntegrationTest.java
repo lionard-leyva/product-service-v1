@@ -1,15 +1,22 @@
 package com.oneclick.productservice.integration;
 
+import com.oneclick.productservice.TestDatabaseConfiguration;
 import com.oneclick.productservice.dto.ProductRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@ActiveProfiles("test")
+@Import(TestDatabaseConfiguration.class)
 class ProductIntegrationTest {
 
     @Autowired
@@ -33,4 +40,5 @@ class ProductIntegrationTest {
                 .jsonPath("$.price").isEqualTo(10);
 
     }
+
 }

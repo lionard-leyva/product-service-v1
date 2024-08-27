@@ -28,6 +28,8 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
+	testImplementation 'org.testcontainers:postgresql:1.17.3'
+	testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
 }
 
 

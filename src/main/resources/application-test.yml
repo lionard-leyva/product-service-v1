@@ -1,17 +1,13 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://postgres:5432/productdb
-    username: postgres
-    password: password
+  # La URL, username y password serán proporcionados dinámicamente por TestDatabaseConfiguration
   flyway:
     enabled: true
-    url: jdbc:postgresql://postgres:5432/productdb
-    user: postgres
-    password: password
-    schemas: public
-    locations:
-      - classpath:db/migration
+    schemas: productdb
+    locations: classpath:db/migration
+    default-schema: productdb
 
 logging:
   level:
     org.springframework.r2dbc: DEBUG
+    org.flywaydb: DEBUG
