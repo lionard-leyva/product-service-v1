@@ -1,13 +1,13 @@
 spring:
-  r2dbc:
-  # La URL, username y password serán proporcionados dinámicamente por TestDatabaseConfiguration
   flyway:
     enabled: true
+    locations: classpath:db/migration,classpath:db/prod/testmigration
+    clean-disabled: false  # Habilita la operación de limpieza para pruebas
     schemas: productdb
-    locations: classpath:db/migration
     default-schema: productdb
 
 logging:
   level:
     org.springframework.r2dbc: DEBUG
     org.flywaydb: DEBUG
+
