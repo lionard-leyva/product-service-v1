@@ -9,5 +9,4 @@ spring:
 logging:
   level:
     org.springframework.r2dbc: DEBUG
-    org.flywaydb: DEBUG
-
+    io.r2dbc.postgresql: TRACE

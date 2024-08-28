@@ -9,6 +9,7 @@ spring:
     user: postgres
     password: password
     schemas: productdb
+    clean-disabled: false
     locations:
       - classpath:db/dev/migration
   data:
