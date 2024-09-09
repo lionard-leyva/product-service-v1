@@ -15,10 +15,27 @@ public class ProductMapper {
             case ProductEntity(var id, var name, var description, var price, String type)
                     when type.equalsIgnoreCase("Default") -> new DefaultProduct(id, name, description, price);
 
-            default -> throw new IllegalArgumentException("Unexpected value: " + productEntity);
+            default -> throw new IllegalArgumentException(STR."Unexpected value: \{productEntity}");
         };
     }
-
+    public ProductEntity productToEntity(Product product) {
+        return switch (product) {
+            case BasicProduct basic -> new ProductEntity(basic.id(), basic.name(), basic.description(), basic.price(), "Basic");
+            case StandardProduct standard -> new ProductEntity(standard.id(), standard.name(), standard.description(), standard.price(), "Standard");
+            case DefaultProduct defaultProduct -> new ProductEntity(defaultProduct.id(), defaultProduct.name(), defaultProduct.description(), defaultProduct.price(), "Default");
+        };
+    }
+    public Product productRequestToProduct(ProductRequest request) {
+        return switch (request) {
+            case ProductRequest(var name, var description, var price, var type)
+                    when type.equalsIgnoreCase("Basic") -> new BasicProduct(null, name, description, price);
+            case ProductRequest(var name, var description, var price, var type)
+                    when type.equalsIgnoreCase("Standard") -> new StandardProduct(null, name, description, price);
+            case ProductRequest(var name, var description, var price, var type)
+                    when type.equalsIgnoreCase("Default") -> new DefaultProduct(null, name, description, price);
+            default -> throw new IllegalArgumentException(STR."Unknown product type: \{request.type()}");
+        };
+    }
     public ProductEntity productRequestToEntity(ProductRequest request) {
         return new ProductEntity(
                 null,

@@ -31,13 +31,15 @@ public class ProductController {
                 .map(ResponseEntity::ok);
     }
 
+    @PutMapping("/{id}")
+    public Mono<ResponseEntity<Product>> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest) {
+        return productService.updateProduct(Long.valueOf(id), productRequest)
+                .map(ResponseEntity::ok);
+    }
 
-//    @PutMapping("/{id}")
-//    public Mono<ResponseEntity<Product>> updateProduct(@PathVariable String id,
-//                                                       @RequestBody ProductRequest productRequest) {
-//        Product product = ProductRequestAdapter.toProduct(productRequest);
-//        return productService.updateProduct(id, product)
-//                .map(ResponseEntity::ok)
-//                .defaultIfEmpty(ResponseEntity.notFound().build());
-//    }
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable String id) {
+        return productService.deleteProduct(Long.valueOf(id))
+                .map(ResponseEntity::ok);
+    }
 }

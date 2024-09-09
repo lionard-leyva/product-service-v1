@@ -71,4 +71,20 @@ class ProductControllerTest {
                 .isEqualTo(testCase.expectedProduct);
         verify(productService).getProduct(testCase.expectedProduct.id());
     }
+
+    @ParameterizedTest
+    @MethodSource("productTestCases")
+    void updateProduct_shouldReturnUpdatedProduct(TestCase testCase) {
+        when(productService.updateProduct(testCase.expectedProduct.id(), testCase.productRequest)).thenReturn(Mono.just(testCase.expectedProduct));
+
+        webTestClient.put()
+                .uri(STR."/api/products/\{testCase.expectedProduct.id()}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(testCase.productRequest)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Product.class)
+                .isEqualTo(testCase.expectedProduct);
+        verify(productService).updateProduct(testCase.expectedProduct.id(), testCase.productRequest);
+    }
 }

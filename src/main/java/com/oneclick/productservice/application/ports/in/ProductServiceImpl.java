@@ -1,7 +1,6 @@
 package com.oneclick.productservice.application.ports.in;
 
-import com.oneclick.productservice.domain.Product;
-import com.oneclick.productservice.domain.ProductEntity;
+import com.oneclick.productservice.domain.*;
 import com.oneclick.productservice.domain.factory.ProductFactoryRegistry;
 import com.oneclick.productservice.dto.ProductMapper;
 import com.oneclick.productservice.dto.ProductRequest;
@@ -41,33 +40,27 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Mono<Product> getProduct(Long id) {
         return productRepository.findById(id)
-                .map(this::mapToDomain)
+                .map(productMapper::productEntityToProduct)
                 .doOnNext(product -> log.info("Product found: {}", product.id()));
     }
 
-
-//    private Product createProductFromRequest(ProductRequest request) {
-//        return switch (request) {
-//            case ProductRequest(var name, var description, var price, var type)
-//                    when factoryRegistry.getFactory(type) != null ->
-//                    factoryRegistry.getFactory(type).create(null, name, description, price);
-//            case ProductRequest(_, _, _, var type) ->
-//                    throw new IllegalArgumentException("Unknown product type: " + type);
-//        };
-//    }
-
-
-
     @Override
-    public Mono<Product> updateProduct(Long id, ProductRequest product) {
-        //TODO: Implement this method
-//        return repository.findById(id)
-//                .flatMap(existingProduct -> {
-//                    Product updatedProduct = createUpdatedProduct(product, existingProduct.getId());
-//                    return repository.save(mapToEntity(updatedProduct))
-//                            .map(this::mapToDomain);
-//                });
-        return null;
+    public Mono<Product> updateProduct(Long id, ProductRequest productRequest) {
+        return productRepository.findById(id)
+                .flatMap(existingProduct -> {
+                    Product updatedProduct = productMapper.productRequestToProduct(productRequest);
+                    Product product = switch (updatedProduct) {
+                        case BasicProduct basic ->
+                                new BasicProduct(existingProduct.id(), basic.name(), basic.description(), basic.price());
+                        case DefaultProduct defaultProd ->
+                                new DefaultProduct(existingProduct.id(), defaultProd.name(), defaultProd.description(), defaultProd.price());
+                        case StandardProduct standard ->
+                                new StandardProduct(existingProduct.id(), standard.name(), standard.description(), standard.price());
+                    };
+                    ProductEntity productEntity = productMapper.productToEntity(product);
+                    return productRepository.save(productEntity)
+                            .map(productMapper::productEntityToProduct);
+                });
     }
 
     @Override
@@ -75,33 +68,8 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
-    private Product createUpdatedProduct(Product product, Long existingId) {
-//        var factory = ProductFactoryRegistry.getFactory(product);
-//        return factory.create(existingId, product.name(), product.description(), product.price());
-        return null;
-    }
-
     @Override
     public Flux<Product> getAllProduct() {
         return null;
     }
-
-    public Product mapToDomain(ProductEntity entity) {
-
-        return null;
-    }
-
-//    private ProductEntity mapToEntity(Product product) {
-//        return productToEntityConverter.apply(product);
-//    }
-
-//    private final Function<Product, ProductEntity> productToEntityConverter = product -> {
-//        ProductEntity entity = new ProductEntity();
-//        entity.setId(product.id());
-//        entity.setName(product.name());
-//        entity.setDescription(product.description());
-//        entity.setPrice(product.price());
-//        entity.setType(product.type());
-//        return entity;
-//    };
 }

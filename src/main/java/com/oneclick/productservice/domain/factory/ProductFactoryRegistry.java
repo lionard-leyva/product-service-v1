@@ -17,7 +17,6 @@ public class ProductFactoryRegistry {
     }
 
     public ProductFactory getFactory(String type) {
-
         return factories.get(type.toLowerCase());
     }
 }
