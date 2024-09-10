@@ -18,8 +18,6 @@ public sealed interface Product permits BasicProduct, DefaultProduct, StandardPr
 
     String description();
 
-    BigDecimal price();
-
     String type();
 
     BigDecimal getPrice();

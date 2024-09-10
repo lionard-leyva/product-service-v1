@@ -1,6 +1,7 @@
 package com.oneclick.productservice.testbuilders;
 
 import com.oneclick.productservice.domain.*;
+import com.oneclick.productservice.domain.strategy.PricingStrategy;
 import com.oneclick.productservice.dto.ProductRequest;
 
 import java.math.BigDecimal;
@@ -8,15 +9,15 @@ import java.math.BigDecimal;
 public class ProductTestBuilder {
 
     public static BasicProduct basicProduct() {
-        return new BasicProduct(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN);
+        return new BasicProduct(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN, PricingStrategy.DEFAULT);
     }
 
     public static StandardProduct standardProduct() {
-        return new StandardProduct(2L, "Standard Test Product", "Standard Description", BigDecimal.valueOf(20));
+        return new StandardProduct(2L, "Standard Test Product", "Standard Description", BigDecimal.valueOf(20), PricingStrategy.DEFAULT);
     }
 
     public static DefaultProduct defaultProduct() {
-        return new DefaultProduct(3L, "Default Test Product", "Default Description", BigDecimal.valueOf(15));
+        return new DefaultProduct(3L, "Default Test Product", "Default Description", BigDecimal.valueOf(15) , PricingStrategy.DEFAULT);
     }
 
     public static ProductRequest basicProductRequest() {
@@ -90,9 +91,9 @@ public class ProductTestBuilder {
 
         public Product build() {
             return switch (type.toUpperCase()) {
-                case "BASIC" -> new BasicProduct(id, name, description, price);
-                case "STANDARD" -> new StandardProduct(id, name, description, price);
-                case "DEFAULT" -> new DefaultProduct(id, name, description, price);
+                case "BASIC" -> new BasicProduct(id, name, description, price, PricingStrategy.DEFAULT);
+                case "STANDARD" -> new StandardProduct(id, name, description, price, PricingStrategy.DEFAULT);
+                case "DEFAULT" -> new DefaultProduct(id, name, description, price, PricingStrategy.DEFAULT);
                 default -> throw new IllegalArgumentException("Unknown product type");
             };
         }

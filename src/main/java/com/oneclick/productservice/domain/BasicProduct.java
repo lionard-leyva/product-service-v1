@@ -1,14 +1,17 @@
 package com.oneclick.productservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.oneclick.productservice.domain.strategy.PricingStrategy;
 
 import java.math.BigDecimal;
+
 @JsonTypeName("BASIC")
 public record BasicProduct(
         Long id,
         String name,
         String description,
-        BigDecimal price
+        BigDecimal basePrice,
+        PricingStrategy pricingStrategy
 ) implements Product {
 
     @Override
@@ -18,6 +21,6 @@ public record BasicProduct(
 
     @Override
     public BigDecimal getPrice() {
-        return price;
+        return pricingStrategy.calculatePrice(basePrice);
     }
 }

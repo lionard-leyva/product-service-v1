@@ -1,6 +1,7 @@
 package com.oneclick.productservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.oneclick.productservice.domain.strategy.PricingStrategy;
 
 import java.math.BigDecimal;
 
@@ -9,7 +10,8 @@ public record StandardProduct(
         Long id,
         String name,
         String description,
-        BigDecimal price
+        BigDecimal basePrice,
+        PricingStrategy pricingStrategy
 
 ) implements Product {
 
@@ -20,6 +22,6 @@ public record StandardProduct(
 
     @Override
     public BigDecimal getPrice() {
-        return price;
+        return pricingStrategy.calculatePrice(basePrice);
     }
 }
