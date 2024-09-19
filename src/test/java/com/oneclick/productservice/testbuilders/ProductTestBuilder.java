@@ -9,15 +9,15 @@ import java.math.BigDecimal;
 public class ProductTestBuilder {
 
     public static BasicProduct basicProduct() {
-        return new BasicProduct(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN, PricingStrategy.DEFAULT);
+        return new BasicProduct(1L, "Basic Test Product", "Basic Description", BigDecimal.TEN, finalPrice;
     }
 
     public static StandardProduct standardProduct() {
-        return new StandardProduct(2L, "Standard Test Product", "Standard Description", BigDecimal.valueOf(20), PricingStrategy.DEFAULT);
+        return new StandardProduct(2L, "Standard Test Product", "Standard Description", BigDecimal.valueOf(20), finalPrice;
     }
 
     public static DefaultProduct defaultProduct() {
-        return new DefaultProduct(3L, "Default Test Product", "Default Description", BigDecimal.valueOf(15) , PricingStrategy.DEFAULT);
+        return new DefaultProduct(3L, "Default Test Product", "Default Description", BigDecimal.valueOf(15) , finalPrice;
     }
 
     public static ProductRequest basicProductRequest() {
@@ -91,9 +91,9 @@ public class ProductTestBuilder {
 
         public Product build() {
             return switch (type.toUpperCase()) {
-                case "BASIC" -> new BasicProduct(id, name, description, price, PricingStrategy.DEFAULT);
-                case "STANDARD" -> new StandardProduct(id, name, description, price, PricingStrategy.DEFAULT);
-                case "DEFAULT" -> new DefaultProduct(id, name, description, price, PricingStrategy.DEFAULT);
+                case "BASIC" -> new BasicProduct(id, name, description, price, finalPrice;
+                case "STANDARD" -> new StandardProduct(id, name, description, price, finalPrice;
+                case "DEFAULT" -> new DefaultProduct(id, name, description, price, finalPrice;
                 default -> throw new IllegalArgumentException("Unknown product type");
             };
         }

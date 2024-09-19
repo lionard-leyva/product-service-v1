@@ -19,13 +19,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final KafkaPricingService kafkaPricingService;
 
 
     public ProductServiceImpl(ProductRepository productRepository,
-                              ProductMapper productMapper) {
+                              ProductMapper productMapper,
+                              KafkaPricingService kafkaPricingService) {
         this.productRepository = productRepository;
 
         this.productMapper = productMapper;
+        this.kafkaPricingService = kafkaPricingService;
     }
 
     @Override
@@ -50,24 +53,28 @@ public class ProductServiceImpl implements ProductService {
                 .flatMap(existingProduct -> {
                     Product updatedProduct = productMapper.productRequestToProduct(productRequest);
 
-                    PricingStrategy pricingStrategy = switch (updatedProduct) {
-                        case BasicProduct basic -> new NoDiscountStrategy();
-                        case DefaultProduct defaultProd -> new NoDiscountStrategy();
-                        case StandardProduct standard -> new ChristmasDiscountStrategy();
-                    };
-                    Product product = switch (updatedProduct) {
-                        case BasicProduct basic ->
-                                new BasicProduct(existingProduct.id(), basic.name(), basic.description(), basic.basePrice(), pricingStrategy);
-                        case DefaultProduct defaultProd ->
-                                new DefaultProduct(existingProduct.id(), defaultProd.name(), defaultProd.description(), defaultProd.basePrice(), pricingStrategy);
-                        case StandardProduct standard ->
-                                new StandardProduct(existingProduct.id(), standard.name(), standard.description(), standard.basePrice(), pricingStrategy);
-                    };
-                    ProductEntity productEntity = productMapper.productToEntity(product);
-                    return productRepository.save(productEntity)
-                            .map(productMapper::productEntityToProduct);
+                    return kafkaPricingService.updatePricing(updatedProduct)
+                            .flatMap(pricing -> {
+                                Product productWithUpdatedPricing = updateProductWithNewPricing(updatedProduct, pricing);
+                                ProductEntity productEntity = productMapper.productToEntity(productWithUpdatedPricing);
+                                return productRepository.save(productEntity)
+                                        .map(productMapper::productEntityToProduct);
+                            });
                 });
     }
+
+
+    private Product updateProductWithNewPricing(Product updatedProduct, Pricing pricing) {
+        return switch (updatedProduct) {
+            case BasicProduct basic ->
+                    new BasicProduct(basic.id(), basic.name(), basic.description(), basic.basePrice(), pricing.calculatedPrice());
+            case StandardProduct standard ->
+                    new StandardProduct(standard.id(), standard.name(), standard.description(), standard.basePrice(), pricing.calculatedPrice());
+            case DefaultProduct defaultProd ->
+                    new DefaultProduct(defaultProd.id(), defaultProd.name(), defaultProd.description(), defaultProd.basePrice(), pricing.calculatedPrice());
+        };
+    }
+
 
     @Override
     public Mono<Void> deleteProduct(Long id) {

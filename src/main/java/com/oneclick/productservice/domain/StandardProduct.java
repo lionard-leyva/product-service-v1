@@ -11,17 +11,16 @@ public record StandardProduct(
         String name,
         String description,
         BigDecimal basePrice,
-        PricingStrategy pricingStrategy
-
+        BigDecimal finalPrice
 ) implements Product {
 
     @Override
     public String type() {
-        return "Standard";
+        return "Basic";
     }
 
     @Override
     public BigDecimal getPrice() {
-        return pricingStrategy.calculatePrice(basePrice);
+        return finalPrice != null ? finalPrice : basePrice;
     }
 }

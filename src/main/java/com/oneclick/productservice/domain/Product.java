@@ -12,14 +12,10 @@ import java.math.BigDecimal;
         @JsonSubTypes.Type(value = StandardProduct.class, name = "STANDARD")
 })
 public sealed interface Product permits BasicProduct, DefaultProduct, StandardProduct {
+
     Long id();
-
     String name();
-
     String description();
-
     String type();
-
     BigDecimal getPrice();
 }
-

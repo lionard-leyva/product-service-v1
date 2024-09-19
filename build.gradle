@@ -29,6 +29,20 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
 	testImplementation 'org.testcontainers:postgresql:1.17.3'
+	//kafka
+	// Spring Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// Kafka Client
+	implementation 'org.apache.kafka:kafka-clients'
+
+	// Reactor Kafka para la integración reactiva (opcional, si necesitas trabajar con Kafka de forma completamente reactiva)
+	implementation 'io.projectreactor.kafka:reactor-kafka'
+
+	// Testcontainers para JUnit 5
+	testImplementation 'org.testcontainers:testcontainers:1.17.3'
+	testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
+	testImplementation 'org.testcontainers:postgresql:1.17.3'
 
 }
 

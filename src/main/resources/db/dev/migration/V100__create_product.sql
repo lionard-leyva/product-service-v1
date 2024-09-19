@@ -1,6 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS productdb;
 
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS productdb.product(
                                    id SERIAL PRIMARY KEY,
                                    name VARCHAR(100) NOT NULL,
                                    description TEXT,
