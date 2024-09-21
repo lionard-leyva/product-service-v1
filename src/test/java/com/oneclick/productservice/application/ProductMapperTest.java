@@ -13,28 +13,28 @@ class ProductMapperTest {
 
     @Test
     void mapToDomain_withBasicProduct_shouldReturnBasicProduct() {
-        ProductEntity productEntity = new ProductEntity(1L, "Basic Product", "Description", BigDecimal.valueOf(10.00), "BASIC");
+        ProductEntity productEntity = new ProductEntity(1L, "Basic Product", "Description", BigDecimal.valueOf(10.00), BigDecimal.ZERO, "BASIC");
         Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(BasicProduct.class, result);
     }
 
     @Test
     void mapToDomain_withDefaultProduct_shouldReturnDefaultProduct() {
-        ProductEntity productEntity = new ProductEntity(1L, "Default Product", "Description", BigDecimal.valueOf(10.00), "DEFAULT");
+        ProductEntity productEntity = new ProductEntity(1L, "Default Product", "Description", BigDecimal.valueOf(10.00), BigDecimal.ZERO, "DEFAULT");
         Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(DefaultProduct.class, result);
     }
 
     @Test
     void mapToDomain_withStandardProduct_shouldReturnDefaultProduct() {
-        ProductEntity productEntity = new ProductEntity(1L, "Standard Product", "Description", BigDecimal.valueOf(10.00), "STANDARD");
+        ProductEntity productEntity = new ProductEntity(1L, "Standard Product", "Description", BigDecimal.valueOf(10.00), BigDecimal.ZERO, "STANDARD");
         Product result = productMapper.productEntityToProduct(productEntity);
         assertInstanceOf(StandardProduct.class, result);
     }
 
     @Test
     void mapToDomain_withUnknownProduct_shouldReturnDefaultProduct() {
-        ProductEntity productEntity = new ProductEntity(1L, "Unknown Product", "Description", BigDecimal.valueOf(10.00), "UNKNOWN");
+        ProductEntity productEntity = new ProductEntity(1L, "Unknown Product", "Description", BigDecimal.valueOf(10.00), BigDecimal.ZERO, "UNKNOWN");
         assertThrows(IllegalArgumentException.class, () -> productMapper.productEntityToProduct(productEntity));
     }
 }

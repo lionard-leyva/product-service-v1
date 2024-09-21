@@ -52,7 +52,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .flatMap(existingProduct -> {
                     Product updatedProduct = productMapper.productRequestToProduct(productRequest);
-
                     return kafkaPricingService.updatePricing(updatedProduct)
                             .flatMap(pricing -> {
                                 Product productWithUpdatedPricing = updateProductWithNewPricing(updatedProduct, pricing);

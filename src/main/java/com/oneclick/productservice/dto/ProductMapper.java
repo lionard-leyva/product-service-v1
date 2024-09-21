@@ -7,21 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
+    // Conversión de ProductEntity a Product
     public Product productEntityToProduct(ProductEntity productEntity) {
         return switch (productEntity) {
-            case ProductEntity(var id, var name, var description, var price, var finalPrice, String type)
-                    when type.equalsIgnoreCase("Basic") -> new BasicProduct(id, name, description, price, finalPrice);
-            case ProductEntity(var id, var name, var description, var price, var finalPrice, String type)
+            case ProductEntity(var id, var name, var description, var basePrice, var finalPrice, String type)
+                    when type.equalsIgnoreCase("Basic") ->
+                    new BasicProduct(id, name, description, basePrice, finalPrice);
+            case ProductEntity(var id, var name, var description, var basePrice, var finalPrice, String type)
                     when type.equalsIgnoreCase("Standard") ->
-                    new StandardProduct(id, name, description, price, finalPrice);
-            case ProductEntity(var id, var name, var description, var price, var finalPrice, String type)
+                    new StandardProduct(id, name, description, basePrice, finalPrice);
+            case ProductEntity(var id, var name, var description, var basePrice, var finalPrice, String type)
                     when type.equalsIgnoreCase("Default") ->
-                    new DefaultProduct(id, name, description, price, finalPrice);
-
+                    new DefaultProduct(id, name, description, basePrice, finalPrice);
             default -> throw new IllegalArgumentException(STR."Unexpected value: \{productEntity}");
         };
     }
 
+    // Conversión de Product a ProductEntity
     public ProductEntity productToEntity(Product product) {
         return switch (product) {
             case BasicProduct basic ->
@@ -33,6 +35,7 @@ public class ProductMapper {
         };
     }
 
+    // Conversión de ProductRequest a Product
     public Product productRequestToProduct(ProductRequest request) {
         return switch (request.type().toLowerCase()) {
             case "basic" ->
@@ -41,12 +44,11 @@ public class ProductMapper {
                     new StandardProduct(null, request.name(), request.description(), request.basePrice(), request.finalPrice());
             case "default" ->
                     new DefaultProduct(null, request.name(), request.description(), request.basePrice(), request.finalPrice());
-            default ->
-                    throw new IllegalArgumentException(STR."Unknown product type: \{request.type()}");
+            default -> throw new IllegalArgumentException(STR."Unknown product type: \{request.type()}");
         };
     }
 
-
+    // Conversión de ProductRequest a ProductEntity
     public ProductEntity productRequestToEntity(ProductRequest request) {
         return new ProductEntity(
                 null,
@@ -57,7 +59,5 @@ public class ProductMapper {
                 request.type().toLowerCase()
         );
     }
-
-
 }
 

@@ -58,7 +58,7 @@ class ProductIntegrationTest {
 
     @Test
     void createProduct_shouldReturnCreatedProduct() {
-        ProductRequest productRequest = new ProductRequest("Monitor LCD", "Basic product", BigDecimal.TEN, "BASIC");
+        ProductRequest productRequest = new ProductRequest("Monitor LCD", "Basic product", BigDecimal.TEN, BigDecimal.ZERO, "BASIC");
 
         webTestClient.post()
                 .uri("/api/products")
