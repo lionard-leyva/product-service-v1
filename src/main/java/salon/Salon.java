@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Salon {
-    public static final int NUMBER_WOMAN_SALON = 2;
+    public static final int NUMBER_WOMAN_SALON = 4;
     public static final int NUMBER_CLIENTS = 3;
     private Queue<Client> queueClients = new LinkedList<>();
     final Object lock = new Object();
@@ -14,6 +14,14 @@ public class Salon {
         womanSalon = new Thread[NUMBER_WOMAN_SALON];
         for (int i = 0; i < NUMBER_WOMAN_SALON; i++) {
             this.womanSalon[i] = new Thread(new WomanSalon(this, "WomanSalon " + i));
+        }
+    }
+    public void start() {
+        for (Thread womanSalon : womanSalon) {
+            womanSalon.start();
+        }
+        for (int i = 0; i < NUMBER_CLIENTS; i++) {
+            addClient(new Client("Client " + i));
         }
     }
 
