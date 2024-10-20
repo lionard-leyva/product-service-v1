@@ -1,7 +1,8 @@
 package com.oneclick.productservice.application.ports.in.kafka;
 
 import com.oneclick.productservice.domain.kafka.ProductEvent;
+import reactor.core.publisher.Mono;
 
 public interface PricingEventSender {
-  void sendPricingUpdateEvent(ProductEvent productEvent);
+  Mono<Void> sendPricingUpdateEvent(ProductEvent productEvent);
 }

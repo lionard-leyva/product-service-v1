@@ -2,7 +2,11 @@ package com.oneclick.productservice.application.ports.in.kafka;
 
 import com.oneclick.productservice.domain.kafka.ProductEvent;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class KafkaPricingEventSender implements PricingEventSender {
@@ -14,7 +18,11 @@ public class KafkaPricingEventSender implements PricingEventSender {
     }
 
     @Override
-    public void sendPricingUpdateEvent(ProductEvent productEvent) {
-        kafkaTemplate.send("pricing.update", productEvent);
+    public Mono<Void> sendPricingUpdateEvent(ProductEvent productEvent) {
+        return Mono.fromFuture(() -> {
+            CompletableFuture<SendResult<String, ProductEvent>> future = kafkaTemplate
+                    .send("pricing.update", productEvent).toCompletableFuture();
+            return future.thenApply(_ -> null);
+        });
     }
 }

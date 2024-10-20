@@ -44,11 +44,13 @@ public class ProductServiceImpl implements ProductService {
                     ProductEntity productEntity = productMapper.productToEntity(product).withFinalPrice(BigDecimal.ZERO);
                     return productRepository.save(productEntity);
                 })
-                .doOnSuccess(savedProductEntity -> {
+                .flatMap(savedProductEntity -> {
                     Product savedProduct = productMapper.productEntityToProduct(savedProductEntity);
                     ProductEvent productEvent = productEventFactory.createProductEvent((savedProduct));
-                    kafkaPricingEventSender.sendPricingUpdateEvent(productEvent);
-                }).map(productMapper::productEntityToProduct);
+                    return kafkaPricingEventSender.sendPricingUpdateEvent(productEvent)
+                            .thenReturn(savedProduct);
+                })
+                .doOnNext(product -> log.info("Producto creado y evento enviado a Kafka para el producto ID: {}", product.id()));
     }
 
     @Override
@@ -60,16 +62,16 @@ public class ProductServiceImpl implements ProductService {
                     //Set finalPrice to zero before to save
                     ProductEntity updatedProductEntity = productMapper.productToEntity(updatedProduct).withFinalPrice(BigDecimal.ZERO);
                     return productRepository.save(updatedProductEntity)
-                            .doOnSuccess(savedProductEntity -> {
+                            .flatMap(savedProductEntity -> {
                                 //create ProductEvent and send to kafka
                                 Product savedProduct = productMapper.productEntityToProduct(savedProductEntity);
                                 ProductEvent savedProductEvent = productEventFactory.createProductEvent(savedProduct);
-                                kafkaPricingEventSender.sendPricingUpdateEvent(savedProductEvent);
-                                log.info("Producto actualizado y evento enviado a Kafka para el producto ID: {}",
-                                        savedProduct.id());
+                                return kafkaPricingEventSender.sendPricingUpdateEvent(savedProductEvent)
+                                        .thenReturn(savedProduct);
+
                             });
                 })
-                .map(productMapper::productEntityToProduct);
+                .doOnNext(product -> log.info("Producto actualizado y evento enviado a Kafka para el producto ID: {}", product.id()));
     }
 
     @Override
