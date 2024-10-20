@@ -1,7 +1,6 @@
 package com.oneclick.productservice.dto;
 
 import com.oneclick.productservice.domain.*;
-import com.oneclick.productservice.domain.strategy.PricingStrategy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -47,6 +46,9 @@ public class ProductMapper {
             default -> throw new IllegalArgumentException(STR."Unknown product type: \{request.type()}");
         };
     }
+    public Product updateProductFromRequest(Product existingProduct, ProductRequest productRequest) {
+        return null;
+    }
 
     // Conversión de ProductRequest a ProductEntity
     public ProductEntity productRequestToEntity(ProductRequest request) {
@@ -59,5 +61,7 @@ public class ProductMapper {
                 request.type().toLowerCase()
         );
     }
+
+
 }
 
