@@ -19,7 +19,7 @@ public class PriceCalculatedEventListener {
     }
 
 
-    @KafkaListener(topics = "pricing-calculated")
+    @KafkaListener(topics = "pricing.update", groupId = "product-service-group")
     public void handlePriceCalculatedEvent(PriceCalculatedEvent event) {
         System.out.println(STR."Received price calculated event: \{event}");
         logger.info("Received price calculated event: {}", event);

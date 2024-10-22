@@ -11,14 +11,22 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.math.BigDecimal;
-
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import java.math.BigDecimal;
+import java.time.Duration;
+
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
+                "spring.flyway.enabled=true"
+        }
+)
 @Testcontainers
 @ActiveProfiles("test")
 class ProductIntegrationTest {
@@ -27,7 +35,13 @@ class ProductIntegrationTest {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:13")
             .withDatabaseName("testdb")
             .withUsername("test")
-            .withPassword("test");
+            .withPassword("test")
+            .withReuse(true);
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"))
+            .withExposedPorts(9092, 9093)
+            .withReuse(true);
 
     @Autowired
     private WebTestClient webTestClient;
@@ -37,30 +51,51 @@ class ProductIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        // Asegurarse de que la base de datos esté limpia antes de cada prueba
         flyway.clean();
         flyway.migrate();
+
+        // Configurar el WebTestClient con un timeout más largo
+        webTestClient = webTestClient.mutate()
+                .responseTimeout(Duration.ofSeconds(30))
+                .build();
     }
 
     @DynamicPropertySource
-    static void registerPgProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.url", () -> postgres.getJdbcUrl().replace("jdbc:", "r2dbc:"));
+    static void registerProperties(DynamicPropertyRegistry registry) {
+        // Configuración de PostgreSQL
+        registry.add("spring.r2dbc.url", () ->
+                String.format("r2dbc:postgresql://%s:%d/%s",
+                        postgres.getHost(),
+                        postgres.getMappedPort(5432),
+                        postgres.getDatabaseName())
+        );
         registry.add("spring.r2dbc.username", postgres::getUsername);
         registry.add("spring.r2dbc.password", postgres::getPassword);
+
+        // Configuración de Flyway
         registry.add("spring.flyway.url", postgres::getJdbcUrl);
         registry.add("spring.flyway.user", postgres::getUsername);
         registry.add("spring.flyway.password", postgres::getPassword);
-        registry.add("spring.flyway.clean-disabled", () -> "false");
-        registry.add("spring.flyway.schemas", () -> "productdb");
-        registry.add("spring.flyway.default-schema", () -> "productdb");
+
+        // Configuración de Kafka
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+        registry.add("spring.kafka.consumer.group-id", () -> "product-service-group-test");
+        registry.add("spring.kafka.consumer.auto-offset-reset", () -> "earliest");
     }
-
-
 
     @Test
     void createProduct_shouldReturnCreatedProduct() {
-        ProductRequest productRequest = new ProductRequest("Monitor LCD", "Basic product", BigDecimal.TEN, BigDecimal.ZERO, "BASIC");
+        ProductRequest productRequest = new ProductRequest(
+                "Monitor LCD",
+                "Basic product",
+                BigDecimal.TEN,
+                BigDecimal.ZERO,
+                "BASIC"
+        );
 
-        webTestClient.post()
+        webTestClient
+                .post()
                 .uri("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(productRequest)

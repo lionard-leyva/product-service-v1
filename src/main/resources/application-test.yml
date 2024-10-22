@@ -2,11 +2,36 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration,classpath:db/prod/testmigration
-    clean-disabled: false  # Habilita la operación de limpieza para pruebas
+    clean-disabled: false
     schemas: productdb
     default-schema: productdb
+
+  r2dbc:
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 10
+      max-idle-time: 30m
+      validation-query: SELECT 1
+
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: product-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      missing-topics-fatal: false
 
 logging:
   level:
     org.springframework.r2dbc: DEBUG
     io.r2dbc.postgresql: TRACE
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: DEBUG
+    com.oneclick.productservice: DEBUG

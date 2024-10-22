@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
                     return kafkaPricingEventSender.sendPricingUpdateEvent(productEvent)
                             .thenReturn(savedProduct);
                 })
-                .doOnNext(product -> log.info("Producto creado y evento enviado a Kafka para el producto ID: {}", product.id()));
+                .doOnNext(product -> log.info("Product creado y event enviado a Kafka para el producto ID: {}", product.id()));
     }
 
     @Override

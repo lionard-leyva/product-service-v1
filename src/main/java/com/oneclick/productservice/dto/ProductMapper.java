@@ -46,8 +46,19 @@ public class ProductMapper {
             default -> throw new IllegalArgumentException(STR."Unknown product type: \{request.type()}");
         };
     }
+
     public Product updateProductFromRequest(Product existingProduct, ProductRequest productRequest) {
-        return null;
+        return switch (productRequest.type()) {
+            case "basic" -> new BasicProduct(existingProduct.id(), productRequest.name(), productRequest.description(),
+                    productRequest.basePrice(), productRequest.finalPrice());
+            case "standard" ->
+                    new StandardProduct(existingProduct.id(), productRequest.name(), productRequest.description(),
+                            productRequest.basePrice(), productRequest.finalPrice());
+            case "default" ->
+                    new DefaultProduct(existingProduct.id(), productRequest.name(), productRequest.description(),
+                            productRequest.basePrice(), productRequest.finalPrice());
+            default -> throw new IllegalArgumentException(STR."Unknown product type: \{productRequest.type()}");
+        };
     }
 
     // Conversión de ProductRequest a ProductEntity
@@ -61,7 +72,4 @@ public class ProductMapper {
                 request.type().toLowerCase()
         );
     }
-
-
 }
-

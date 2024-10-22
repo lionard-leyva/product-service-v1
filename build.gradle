@@ -15,7 +15,6 @@ java {
 repositories {
 	mavenCentral()
 }
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
@@ -29,23 +28,26 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
-	testImplementation 'org.testcontainers:postgresql:1.17.3'
-	//kafka
+
 	// Spring Kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 
 	// Kafka Client
 	implementation 'org.apache.kafka:kafka-clients'
 
-	// Reactor Kafka para la integración reactiva (opcional, si necesitas trabajar con Kafka de forma completamente reactiva)
+	// Reactor Kafka para la integración reactiva (opcional)
 	implementation 'io.projectreactor.kafka:reactor-kafka'
 
 	// Testcontainers para JUnit 5
 	testImplementation 'org.testcontainers:testcontainers:1.17.3'
 	testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
 	testImplementation 'org.testcontainers:postgresql:1.17.3'
+	testImplementation 'org.testcontainers:kafka:1.17.3' // KafkaContainer
 
+	// Spring Kafka Test
+	testImplementation 'org.springframework.kafka:spring-kafka-test' // EmbeddedKafka
 }
+
 
 
 tasks.named('test') {
