@@ -1,0 +1,75 @@
+version: '3.8'
+
+# Definición de servicios
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16.3
+    container_name: product-db  # Nombre explícito del contenedor
+    restart: unless-stopped    # Política de reinicio
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata  # Directorio específico para datos
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - product-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d productdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Servicio de Productos
+  product-service-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: target/*.jar  # Argumento para el Dockerfile
+    container_name: product-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Configuración de Spring
+      SPRING_PROFILES_ACTIVE: dev
+      # Configuración de la base de datos
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/productdb
+      SPRING_R2DBC_USERNAME: postgres
+      SPRING_R2DBC_PASSWORD: password
+      # Configuración de Flyway
+      SPRING_FLYWAY_URL: jdbc:postgresql://postgres:5432/productdb
+      SPRING_FLYWAY_USER: postgres
+      SPRING_FLYWAY_PASSWORD: password
+      # Configuración JVM
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+    networks:
+      - product-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Definición de volúmenes
+volumes:
+  postgres-data:
+    name: product-db-data  # Nombre explícito del volumen
+
+# Definición de redes
+networks:
+  product-network:
+    name: product-network
+    driver: bridge

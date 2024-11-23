@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/productdb
+    username: postgres
+    password: password
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/productdb
+    user: postgres
+    password: password
+    schemas: productdb
+    locations: classpath:db/dev/migration
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    redis:
+      host: redis-dev
+      port: 6379

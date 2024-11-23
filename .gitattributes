@@ -1,0 +1,4 @@
+# Ignorar configuraciones y archivos externos
+*.sh *.pdf *.tmp .vscode/ .idea/ *.log *.tmp .DS_Store
+# Ignorar carpetas globales
+/home/leonard/.* /home/leonard/OneDrive/.* /home/leonard/Applications/
