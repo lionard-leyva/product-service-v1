@@ -1,7 +1,7 @@
 package com.oneclick.productservice.infrastructure.adapter.output.persistence;
 
-import com.oneclick.productservice.domain.model.Product;
+import com.oneclick.productservice.infrastructure.entity.ProductEntity;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-public interface ReactiveProductRepository extends ReactiveCrudRepository<Product, Long> {
+public interface ReactiveProductRepository extends ReactiveCrudRepository<ProductEntity, Long> {
 }
