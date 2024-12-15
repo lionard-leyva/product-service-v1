@@ -9,13 +9,9 @@ public sealed interface Product
         StandardProduct {
 
     String name();
-
     String description();
-
     BigDecimal price();
-
     BigDecimal finalPrice();
-
     ProductType type();
 
     default Product updateFinalPrice(BigDecimal finalPrice) {
