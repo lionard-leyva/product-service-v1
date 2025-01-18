@@ -22,7 +22,7 @@ public class CreateProductUseCaseImpl implements CreateProductUseCase {
     }
 
     @Override
-    public Mono<Product> createProduct(CreateProductRequest productRequest) {
+    public synchronized Mono<Product> createProduct(CreateProductRequest productRequest) {
         return Mono.just(productRequest)
                 .map(productRequestMapper::toDomain)
                 .flatMap(productRepository::save);
